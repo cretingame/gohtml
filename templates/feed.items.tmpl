@@ -1,0 +1,17 @@
+{{ range .items }}
+<h2>{{ .Title }}</h2>
+<p>Description: {{ .Description }}</p>
+<p>Content: {{ .Content }}</p>
+<p>Custom: {{ .Custom }}</p>
+{{ range $key, $value := .Custom }}
+  <li><strong>{{ $key }}</strong>: {{ $value }}</li>
+{{ end }}
+<p>Extensions: {{ .Extensions }}</p>
+{{ range $key, $value := .Extensions }}
+  <li><strong>{{ $key }}</strong>: {{ $value }}</li>
+  {{ range $kk, $vv := $value }}
+    <li><strong>- {{ $kk }}</strong>: {{ $vv }}</li>
+  {{ end }}
+{{ end }}
+<a href="{{ .Link }}">{{ .Link }}</a>
+{{ end }}
