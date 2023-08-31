@@ -1,10 +1,24 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/mmcdole/gofeed"
 )
+
+type YoutubeFeed struct {
+	Title string
+	Items []YoutubeItem
+}
+
+type YoutubeItem struct {
+	Title       string
+	Author      string
+	Description string
+	Link        string
+	Extensions  string
+}
 
 func getJDGfeed() ([]*gofeed.Item, error) {
 	feedParser := gofeed.NewParser()
@@ -19,4 +33,35 @@ func getJDGfeed() ([]*gofeed.Item, error) {
 		fmt.Printf("%+v\n", feedItem)
 	}
 	return feed.Items, err
+}
+
+func getYoutubeFeed(url string) (*YoutubeFeed, error) {
+	feedParser := gofeed.NewParser()
+	rssFeed, err := feedParser.ParseURL(url)
+	if err != nil {
+		return nil, err
+	}
+
+	ytFeed := &YoutubeFeed{
+		Title: rssFeed.Title,
+	}
+	fmt.Println("Feed Title:", rssFeed.Title)
+
+	for i, feedItem := range rssFeed.Items {
+		extensionsBytes, err := json.MarshalIndent(feedItem.Extensions, "", "  ")
+		if err != nil {
+			return nil, err
+		}
+		ytItem := YoutubeItem{
+			Title:       feedItem.Title,
+			Author:      feedItem.Author.Name,
+			Description: feedItem.Extensions["media"]["group"][0].Children["description"][0].Value,
+			Link:        feedItem.Link,
+			Extensions:  string(extensionsBytes),
+		}
+		fmt.Println("# Item number", i)
+		fmt.Printf("%+v\n", feedItem)
+		ytFeed.Items = append(ytFeed.Items, ytItem)
+	}
+	return ytFeed, err
 }

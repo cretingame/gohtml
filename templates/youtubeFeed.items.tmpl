@@ -1,0 +1,6 @@
+{{ range .items }}
+<h2>{{ .Title }}</h2>
+<p>Description: {{ .Description }}</p>
+<a href="{{ .Link }}">{{ .Link }}</a>
+<p>Extensions: <pre>{{ .Extensions }}</pre></p>
+{{ end }}

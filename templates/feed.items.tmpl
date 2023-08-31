@@ -1,7 +1,6 @@
 {{ range .items }}
 <h2>{{ .Title }}</h2>
 <p>Description: {{ .Description }}</p>
-<p>Content: {{ .Content }}</p>
 <p>Custom: {{ .Custom }}</p>
 {{ range $key, $value := .Custom }}
   <li><strong>{{ $key }}</strong>: {{ $value }}</li>
