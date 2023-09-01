@@ -10,11 +10,6 @@ import (
 func main() {
 	fmt.Println("gohtml server draft")
 
-	// items, err := getJDGfeed()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
 	feedUrl := "https://www.youtube.com/feeds/videos.xml?channel_id=UC_yP2DpIgs5Y1uWC0T03Chw"
 	feed, err := getYoutubeFeed(feedUrl)
 	if err != nil {
@@ -32,6 +27,21 @@ func main() {
 			"items": items,
 		})
 		ctx.HTML(http.StatusOK, "index.foot.tmpl", nil)
+	})
+
+	router.GET("/youtubefeed.html", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "index.head.tmpl", nil)
+		ctx.HTML(http.StatusOK, "youtubeFeed.items.tmpl", gin.H{
+			"items": items,
+		})
+		ctx.HTML(http.StatusOK, "index.foot.tmpl", nil)
+	})
+
+	router.GET("/page.html", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "page.tmpl", gin.H{
+			"title":   "Page Title",
+			"content": "Page Content",
+		})
 	})
 
 	router.Run(":8080")

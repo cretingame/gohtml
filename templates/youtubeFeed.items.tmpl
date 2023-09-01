@@ -1,7 +1,10 @@
 {{ range .items }}
 <h2>{{ .Title }}</h2>
-<div>Description: {{ .Description }}</div>
+<h3>Description</h3>
+<div>{{ .Description }}</div>
+<h3>Link</h3>
 <a href="{{ .Link }}">{{ .Link }}</a>
+<h3>More</h3>
 <p class="d-inline-flex gap-1">
   <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ .Id }}" aria-expanded="false" aria-controls="collapse{{ .Id }}">
     Extensions
