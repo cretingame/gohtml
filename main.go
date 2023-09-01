@@ -44,5 +44,13 @@ func main() {
 		})
 	})
 
+	router.GET("/string.html", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "Hello !")
+	})
+
+	router.GET("/write.html", func(ctx *gin.Context) {
+		ctx.Writer.Write([]byte("TEST"))
+	})
+
 	router.Run(":8080")
 }
