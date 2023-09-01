@@ -1,9 +1,12 @@
 {{ range .items }}
 <h2>{{ .Title }}</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ .VideoId }}" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 <h3>Description</h3>
 <div>{{ .Description }}</div>
 <h3>Link</h3>
-<a href="{{ .Link }}">{{ .Link }}</a>
+<div><a href="{{ .Link }}">{{ .Link }}</a></div>
+<h3>Video Id</h3>
+<div>{{ .VideoId }}</div>
 <h3>More</h3>
 <p class="d-inline-flex gap-1">
   <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ .Id }}" aria-expanded="false" aria-controls="collapse{{ .Id }}">

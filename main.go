@@ -10,31 +10,55 @@ import (
 func main() {
 	fmt.Println("gohtml server draft")
 
-	feedUrl := "https://www.youtube.com/feeds/videos.xml?channel_id=UC_yP2DpIgs5Y1uWC0T03Chw"
-	feed, err := getYoutubeFeed(feedUrl)
-	if err != nil {
-		panic(err)
-	}
-	items := feed.Items
-
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")
 	router.Static("/assets", "./assets/")
 
 	router.GET("/", func(ctx *gin.Context) {
+		channelId := "UC_yP2DpIgs5Y1uWC0T03Chw"
+		feed, err := getYoutubeFeed(channelId)
+		if err != nil {
+			ctx.Status(http.StatusTeapot)
+			return
+		}
 		ctx.HTML(http.StatusOK, "index.head.tmpl", nil)
 		ctx.HTML(http.StatusOK, "youtubeFeed.items.tmpl", gin.H{
-			"items": items,
+			"items": feed.Items,
 		})
 		ctx.HTML(http.StatusOK, "index.foot.tmpl", nil)
 	})
 
 	router.GET("/youtubefeed.html", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "index.head.tmpl", nil)
-		ctx.HTML(http.StatusOK, "youtubeFeed.items.tmpl", gin.H{
-			"items": items,
+		channelId := "UC_yP2DpIgs5Y1uWC0T03Chw"
+		feed, err := getYoutubeFeed(channelId)
+		if err != nil {
+			ctx.Status(http.StatusTeapot)
+			return
+		}
+		ctx.HTML(http.StatusOK, "youtube.feed.tmpl", gin.H{
+			"title": feed.Title,
+			"items": feed.Items,
 		})
-		ctx.HTML(http.StatusOK, "index.foot.tmpl", nil)
+	})
+
+	router.GET("/youtube/channel/:id", func(ctx *gin.Context) {
+		var channel struct {
+			Id string `uri:"id" binding:"required"`
+		}
+		err := ctx.ShouldBindUri(&channel)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return
+		}
+		feed, err := getYoutubeFeed(channel.Id)
+		if err != nil {
+			ctx.String(http.StatusNotFound, "Channel %s not found, %s", channel.Id, err.Error())
+			return
+		}
+		ctx.HTML(http.StatusOK, "youtube.feed.tmpl", gin.H{
+			"title": feed.Title,
+			"items": feed.Items,
+		})
 	})
 
 	router.GET("/page.html", func(ctx *gin.Context) {
@@ -50,6 +74,18 @@ func main() {
 
 	router.GET("/write.html", func(ctx *gin.Context) {
 		ctx.Writer.Write([]byte("TEST"))
+	})
+
+	router.GET("/uri/:id", func(ctx *gin.Context) {
+		var channel struct {
+			Id string `uri:"id" binding:"required"`
+		}
+		err := ctx.ShouldBindUri(&channel)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return
+		}
+		ctx.String(http.StatusOK, "Hello %s !", channel.Id)
 	})
 
 	router.Run(":8080")

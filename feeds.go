@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/mmcdole/gofeed"
 )
@@ -18,11 +17,13 @@ type YoutubeItem struct {
 	Author      string
 	Description string
 	Link        string
+	VideoId     string
 	Extensions  string
 }
 
-func getYoutubeFeed(url string) (*YoutubeFeed, error) {
+func getYoutubeFeed(channelId string) (*YoutubeFeed, error) {
 	feedParser := gofeed.NewParser()
+	url := "https://www.youtube.com/feeds/videos.xml?channel_id=" + channelId
 	rssFeed, err := feedParser.ParseURL(url)
 	if err != nil {
 		return nil, err
@@ -31,7 +32,6 @@ func getYoutubeFeed(url string) (*YoutubeFeed, error) {
 	ytFeed := &YoutubeFeed{
 		Title: rssFeed.Title,
 	}
-	fmt.Println("Feed Title:", rssFeed.Title)
 
 	for i, feedItem := range rssFeed.Items {
 		extensionsBytes, err := json.MarshalIndent(feedItem.Extensions, "", "  ")
@@ -44,10 +44,9 @@ func getYoutubeFeed(url string) (*YoutubeFeed, error) {
 			Author:      feedItem.Author.Name,
 			Description: feedItem.Extensions["media"]["group"][0].Children["description"][0].Value,
 			Link:        feedItem.Link,
+			VideoId:     feedItem.Extensions["yt"]["videoId"][0].Value,
 			Extensions:  string(extensionsBytes),
 		}
-		fmt.Println("# Item number", i)
-		fmt.Printf("%+v\n", feedItem)
 		ytFeed.Items = append(ytFeed.Items, ytItem)
 	}
 	return ytFeed, err

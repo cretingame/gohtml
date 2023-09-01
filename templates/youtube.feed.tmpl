@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ .title }}</title>
+    <link href="assets/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  </head>
+  <body>
+    <h1>{{ .title }}</h1>
+    <!-- for each video -->
+    {{ range .items }}
+    <h2>{{ .Title }}</h2>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ .VideoId }}" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <h3>Description</h3>
+    <div>{{ .Description }}</div>
+    <h3>Link</h3>
+    <div><a href="{{ .Link }}">{{ .Link }}</a></div>
+    <h3>Video Id</h3>
+    <div>{{ .VideoId }}</div>
+    <h3>More</h3>
+    <p class="d-inline-flex gap-1">
+      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ .Id }}" aria-expanded="false" aria-controls="collapse{{ .Id }}">
+        Extensions
+      </button>
+    </p>
+    <div class="collapse" id="collapse{{ .Id }}">
+      <div class="card card-body">Extensions: <pre>{{ .Extensions }}</pre></div>
+    </div>
+    {{ end }}
+    <script src="/assets/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="/assets/htmx.min.js" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>
+  </body>
+</html>
