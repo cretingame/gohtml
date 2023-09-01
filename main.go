@@ -15,17 +15,7 @@ func main() {
 	router.Static("/assets", "./assets/")
 
 	router.GET("/", func(ctx *gin.Context) {
-		channelId := "UC_yP2DpIgs5Y1uWC0T03Chw"
-		feed, err := getYoutubeFeed(channelId)
-		if err != nil {
-			ctx.Status(http.StatusTeapot)
-			return
-		}
-		ctx.HTML(http.StatusOK, "index.head.tmpl", nil)
-		ctx.HTML(http.StatusOK, "youtubeFeed.items.tmpl", gin.H{
-			"items": feed.Items,
-		})
-		ctx.HTML(http.StatusOK, "index.foot.tmpl", nil)
+		ctx.HTML(http.StatusOK, "index.tmpl", nil)
 	})
 
 	router.GET("/youtubefeed.html", func(ctx *gin.Context) {
