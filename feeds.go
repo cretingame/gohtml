@@ -13,6 +13,7 @@ type YoutubeFeed struct {
 }
 
 type YoutubeItem struct {
+	Id          int
 	Title       string
 	Author      string
 	Description string
@@ -53,6 +54,7 @@ func getYoutubeFeed(url string) (*YoutubeFeed, error) {
 			return nil, err
 		}
 		ytItem := YoutubeItem{
+			Id:          i,
 			Title:       feedItem.Title,
 			Author:      feedItem.Author.Name,
 			Description: feedItem.Extensions["media"]["group"][0].Children["description"][0].Value,
