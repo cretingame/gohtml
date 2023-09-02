@@ -51,6 +51,21 @@ func main() {
 		})
 	})
 
+	router.GET("/youtube/video/:id", func(ctx *gin.Context) {
+		var video struct {
+			Id string `uri:"id" binding:"required"`
+		}
+		err := ctx.ShouldBindUri(&video)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return
+		}
+		ctx.HTML(http.StatusOK, "youtube.video.tmpl", gin.H{
+			"title": "TBD",
+			"id":    video.Id,
+		})
+	})
+
 	router.GET("/page.html", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "page.tmpl", gin.H{
 			"title":   "Page Title",

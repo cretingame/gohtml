@@ -38,14 +38,16 @@ func getYoutubeFeed(channelId string) (*YoutubeFeed, error) {
 		if err != nil {
 			return nil, err
 		}
+		videoId := feedItem.Extensions["yt"]["videoId"][0].Value
 		ytItem := YoutubeItem{
 			Id:          i,
 			Title:       feedItem.Title,
 			Author:      feedItem.Author.Name,
 			Description: feedItem.Extensions["media"]["group"][0].Children["description"][0].Value,
-			Link:        feedItem.Link,
-			VideoId:     feedItem.Extensions["yt"]["videoId"][0].Value,
-			Extensions:  string(extensionsBytes),
+			// Link:        feedItem.Link,
+			Link:       "../video/" + videoId,
+			VideoId:    videoId,
+			Extensions: string(extensionsBytes),
 		}
 		ytFeed.Items = append(ytFeed.Items, ytItem)
 	}
