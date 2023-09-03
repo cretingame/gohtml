@@ -10,6 +10,9 @@
     <h1>Hello, world!</h1>
     <div>Hello</div>
     <div><a href="youtube/channel/UC_yP2DpIgs5Y1uWC0T03Chw">Joueur du Grenier </a></div>
+    {{ range .channels }}
+    <div><a href="youtube/channel/{{ . }}">{{ . }}</a></div>
+    {{ end }}
 
 
     <script src="/assets/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>

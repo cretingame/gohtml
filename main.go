@@ -14,8 +14,15 @@ func main() {
 	router.LoadHTMLGlob("templates/*")
 	router.Static("/assets", "./assets/")
 
+	// Canonical ids
+	channels := []string{
+		"UC_yP2DpIgs5Y1uWC0T03Chw", // Joueur du grenier
+		"UCOJjZIqV9ZzFDgnKOtF-NZg", // Léonie K.
+	}
 	router.GET("/", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "index.tmpl", nil)
+		ctx.HTML(http.StatusOK, "index.tmpl", gin.H{
+			"channels": channels,
+		})
 	})
 
 	router.GET("/youtubefeed.html", func(ctx *gin.Context) {
