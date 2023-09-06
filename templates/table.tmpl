@@ -25,7 +25,7 @@
         </td>
       {{ end }}
         <td>
-          <button class="btn btn-primary" hx-on="click: alert('Delete {{ $key }} ?')">
+          <button class="btn btn-primary" hx-delete="/table/{{ $key }}">
             Delete {{ $key }}
           </button>
         </td>
