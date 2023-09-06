@@ -25,6 +25,27 @@ func main() {
 		})
 	})
 
+	array := [][3]string{
+		{"Alfreds Futterkiste", "Maria Anders", "Germany"},
+		{"Centro comercial Moctezuma", "Francisco Chang", "Mexico"},
+		{"Trader Joes", "James Better", "U.S.A."},
+		{"Migros", "Adolf Oggi", "Switzerland"},
+		{"Carrefour", "Emmanuel Macron", "France"},
+	}
+	router.GET("/table.html", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "table.tmpl", gin.H{
+			"array": array,
+		})
+	})
+
+	router.PUT("/table/:id", func(ctx *gin.Context) {
+		ctx.String(http.StatusNotImplemented, "Not implemented")
+	})
+
+	router.DELETE("/table/:id", func(ctx *gin.Context) {
+		ctx.String(http.StatusNotImplemented, "Not implemented")
+	})
+
 	router.GET("/youtubefeed.html", func(ctx *gin.Context) {
 		channelId := "UC_yP2DpIgs5Y1uWC0T03Chw"
 		feed, err := getYoutubeFeed(channelId)
