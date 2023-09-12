@@ -43,7 +43,23 @@ func main() {
 	})
 
 	router.DELETE("/table/:id", func(ctx *gin.Context) {
-		ctx.String(http.StatusNotImplemented, "Not implemented")
+		var tableRow struct {
+			Id int `uri:"id" binding:"required"`
+		}
+		err := ctx.ShouldBindUri(&tableRow)
+		if err != nil {
+			ctx.String(http.StatusBadRequest, "Bind URI error: "+err.Error())
+			return
+		}
+
+		if tableRow.Id < 0 || tableRow.Id >= len(array) {
+			ctx.String(http.StatusBadRequest, "Not in the table: "+err.Error())
+			return
+		}
+
+		array = append(array[:tableRow.Id], array[tableRow.Id+1:]...)
+
+		ctx.Status(http.StatusOK)
 	})
 
 	router.GET("/youtubefeed.html", func(ctx *gin.Context) {
