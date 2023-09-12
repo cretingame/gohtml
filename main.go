@@ -44,7 +44,7 @@ func main() {
 
 	router.DELETE("/table/:id", func(ctx *gin.Context) {
 		var tableRow struct {
-			Id int `uri:"id" binding:"required"`
+			Id *int `uri:"id" binding:"required"`
 		}
 		err := ctx.ShouldBindUri(&tableRow)
 		if err != nil {
@@ -52,12 +52,14 @@ func main() {
 			return
 		}
 
-		if tableRow.Id < 0 || tableRow.Id >= len(array) {
+		rowId := *tableRow.Id
+
+		if rowId < 0 || rowId >= len(array) {
 			ctx.String(http.StatusBadRequest, "Not in the table: "+err.Error())
 			return
 		}
 
-		array = append(array[:tableRow.Id], array[tableRow.Id+1:]...)
+		array = append(array[:rowId], array[rowId+1:]...)
 
 		ctx.Status(http.StatusOK)
 	})
@@ -135,6 +137,18 @@ func main() {
 			return
 		}
 		ctx.String(http.StatusOK, "Hello %s !", channel.Id)
+	})
+
+	router.GET("/num/:id", func(ctx *gin.Context) {
+		var num struct {
+			Id *int `uri:"id" binding:"required"`
+		}
+		err := ctx.ShouldBindUri(&num)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return
+		}
+		ctx.String(http.StatusOK, "I have %d potatoes !", *num.Id)
 	})
 
 	router.Run(":8080")
